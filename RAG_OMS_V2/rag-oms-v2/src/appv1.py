@@ -61,29 +61,20 @@ class EmbeddingProxy:
 
 
 @st.cache_resource(show_spinner="Loading vector database...")
-def create_vector_db(_texts, embeddings=None, collection_name="chroma"):
+def create_vector_db(_texts, embeddings=None):
 
-    try:
-        asyncio.get_event_loop()
-    except RuntimeError:
-        asyncio.set_event_loop(asyncio.new_event_loop())
-    persist_dir = os.path.join("store/", collection_name)
-
+    # Initialize embeddings if not provided
     if not embeddings:
         embeddings = GoogleGenerativeAIEmbeddings(
             model=EMBEDDING_MODEL_NAME,
             task_type="retrieval_document"
         )
-    proxy_embeddings = EmbeddingProxy(embeddings, use_delay = False)
+    proxy_embeddings = EmbeddingProxy(embeddings, use_delay=False)
 
-    # If DB already exists, load it
-    # if os.path.exists(os.path.join(persist_dir, "index")):
-    print(f"Loading existing Chroma DB from {persist_dir}")
-    db = Chroma(
-        collection_name=collection_name,
-        embedding_function=proxy_embeddings,
-        # persist_directory=persist_dir
-    )
+    # FAISS is always built in memory due to ephemeral storage on Streamlit Cloud
+    print("Creating FAISS vector DB in memory (no persistent storage).")
+    db = FAISS.from_texts(_texts, proxy_embeddings)
+
     return db
 
 
