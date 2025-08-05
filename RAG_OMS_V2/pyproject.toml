@@ -1,0 +1,26 @@
+[project]
+name = "rag-oms-v1"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Priya Patil",email = "priya.fl15@gmail.com"}
+]
+
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "pypdf (>=5.9.0,<6.0.0)",
+    "langchain (>=0.3.27,<0.4.0)",
+    "langchain-community (>=0.3.27,<0.4.0)",
+    "langchain-google-genai (>=2.1.8,<3.0.0)",
+    "chromadb (>=1.0.15,<2.0.0)",
+    "streamlit (>=1.47.1,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{ include = "rag_oms_v1" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
