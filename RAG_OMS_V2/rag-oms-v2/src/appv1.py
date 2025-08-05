@@ -193,7 +193,7 @@ def main():
                                 docs = get_document_text(uploaded_file)
                                 split_docs = textSplitter(docs)
                                 collectionName = clean_collection_name(os.path.splitext(uploaded_file.name)[0].replace(" ", "_"))
-                                st.session_state.vs = create_vector_db(split_docs, collection_name=collectionName)
+                                st.session_state.vs = create_vector_db(split_docs)
                         vs = st.session_state.vs
                         retriever = vs.as_retriever()
                         context = retriever.invoke(query)
