@@ -13,6 +13,8 @@ import asyncio
 import streamlit as st
 import tempfile
 from config import *
+from langchain_community.vectorstores import FAISS
+
 st.set_page_config(page_title="RAG based OMS Assistant powered by LangChain and Google Gemini", layout="wide")
 
 
@@ -75,23 +77,13 @@ def create_vector_db(_texts, embeddings=None, collection_name="chroma"):
     proxy_embeddings = EmbeddingProxy(embeddings, use_delay = False)
 
     # If DB already exists, load it
-    if os.path.exists(os.path.join(persist_dir, "index")):
-        print(f"Loading existing Chroma DB from {persist_dir}")
-        db = Chroma(
-            collection_name=collection_name,
-            embedding_function=proxy_embeddings,
-            persist_directory=persist_dir
-        )
-    else:
-        print("Creating new Chroma DB")
-        db = Chroma(
-            collection_name=collection_name,
-            embedding_function=proxy_embeddings,
-            persist_directory=persist_dir
-        )
-        db.add_documents(_texts)
-        db.persist()
-
+    # if os.path.exists(os.path.join(persist_dir, "index")):
+    print(f"Loading existing Chroma DB from {persist_dir}")
+    db = Chroma(
+        collection_name=collection_name,
+        embedding_function=proxy_embeddings,
+        # persist_directory=persist_dir
+    )
     return db
 
 
