@@ -62,6 +62,10 @@ class EmbeddingProxy:
 
 @st.cache_resource(show_spinner="Loading vector database...")
 def create_vector_db(_texts, embeddings=None):
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
 
     # Initialize embeddings if not provided
     if not embeddings:
